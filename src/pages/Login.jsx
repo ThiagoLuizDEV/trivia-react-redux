@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom/cjs/react-router-dom';
 import PropTypes from 'prop-types';
 
 class Login extends React.Component {
@@ -6,6 +7,7 @@ class Login extends React.Component {
     name: '',
     email: '',
     buttonDisabled: true,
+    willRedirect: false,
   };
 
   verificaEmail = () => {
@@ -22,15 +24,23 @@ class Login extends React.Component {
     this.setState({ [name]: value }, () => { this.verificaEmail(); });
   };
 
+  handleClick = async () => {
+    const response = await fetch('https://opentdb.com/api_token.php?command=request');
+    const data = await response.json();
+    localStorage.setItem('token', data.token);
+    this.setState({ willRedirect: true });
+  };
+
   settingsBtn = () => {
     const { history } = this.props;
     history.push('/settings');
   };
 
   render() {
-    const { name, email, buttonDisabled } = this.state;
+    const { name, email, buttonDisabled, willRedirect } = this.state;
     return (
       <>
+        {willRedirect && <Redirect to="/game" />}
         <div>Login</div>
         <form>
           <h3>Insira seu nome:</h3>
@@ -53,9 +63,10 @@ class Login extends React.Component {
             onChange={ this.handleChange }
           />
           <button
-            type="submit"
+            type="button"
             data-testid="btn-play"
             disabled={ buttonDisabled }
+            onClick={ this.handleClick }
           >
             Play
           </button>
