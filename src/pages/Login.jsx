@@ -30,7 +30,7 @@ class Login extends React.Component {
     localStorage.setItem('token', data.token);
     this.setState({ willRedirect: true });
   };
-  
+
   settingsBtn = () => {
     const { history } = this.props;
     history.push('/settings');
