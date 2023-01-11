@@ -30,7 +30,7 @@ class Login extends React.Component {
           <h3>Insira seu nome:</h3>
           <input
             type="text"
-            id="text"
+            id="name"
             name="name"
             value={ name }
             data-testid="input-player-name"
