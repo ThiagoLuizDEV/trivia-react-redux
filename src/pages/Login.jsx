@@ -1,5 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom/cjs/react-router-dom';
+import PropTypes from 'prop-types';
 
 class Login extends React.Component {
   state = {
@@ -29,6 +30,11 @@ class Login extends React.Component {
     localStorage.setItem('token', data.token);
     this.setState({ willRedirect: true });
   };
+  
+  settingsBtn = () => {
+    const { history } = this.props;
+    history.push('/settings');
+  };
 
   render() {
     const { name, email, buttonDisabled, willRedirect } = this.state;
@@ -40,7 +46,7 @@ class Login extends React.Component {
           <h3>Insira seu nome:</h3>
           <input
             type="text"
-            id="text"
+            id="name"
             name="name"
             value={ name }
             data-testid="input-player-name"
@@ -64,10 +70,20 @@ class Login extends React.Component {
           >
             Play
           </button>
+          <button
+            type="button"
+            data-testid="btn-settings"
+            onClick={ this.settingsBtn }
+          >
+            Configuração
+          </button>
         </form>
       </>
     );
   }
 }
+Login.propTypes = {
+  history: PropTypes.func,
+}.isRequired;
 
 export default Login;
