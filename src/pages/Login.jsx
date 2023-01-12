@@ -14,7 +14,7 @@ class Login extends React.Component {
 
   verificaEmail = () => {
     const { email, name } = this.state;
-    const total = 6;
+    const total = 1;
     const validacaoEmail = /[^@ \n]+@[^@ \n]+\.[^@ \n]/;
     if (validacaoEmail.test(email) && name.length >= total) {
       this.setState({ buttonDisabled: false });
@@ -40,6 +40,13 @@ class Login extends React.Component {
     const { history } = this.props;
     history.push('/settings');
   };
+
+  // handleSubmit = (event) => {
+  //   event.preventDefault();
+  //   const { dispatch, history } = this.props;
+  //   dispatch(addPersonal(this.state));
+  //   history.push('/game');
+  // };
 
   render() {
     const { name, email, buttonDisabled, willRedirect } = this.state;
