@@ -1,9 +1,9 @@
-// export const ADD_PERSONAL_INFO = 'ADD_PERSONAL_INFO';
+const sendUserInfo = (name, email) => ({
+  type: 'SEND_USER_INFO',
+  payload: {
+    name,
+    email,
+  },
+});
 
-// export const addPersonal = (personalInfo) => {
-//   console.log('chamou action');
-//   return {
-//     type: ADD_PERSONAL_INFO,
-//     payload: { ...personalInfo },
-//   };
-// };
+export default sendUserInfo;

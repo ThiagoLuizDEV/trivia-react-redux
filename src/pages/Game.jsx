@@ -1,9 +1,12 @@
 import React from 'react';
+import Header from './Header';
 
-export default class Game extends React.Component {
+class Game extends React.Component {
   render() {
     return (
-      <h1>Página do jogo</h1>
+      <Header />
     );
   }
 }
+
+export default Game;

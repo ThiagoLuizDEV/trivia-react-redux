@@ -1,6 +1,8 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom/cjs/react-router-dom';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import sendUserInfo from '../redux/actions';
 
 class Login extends React.Component {
   state = {
@@ -25,8 +27,11 @@ class Login extends React.Component {
   };
 
   handleClick = async () => {
+    const { email, name } = this.state;
+    const { dispatch } = this.props;
     const response = await fetch('https://opentdb.com/api_token.php?command=request');
     const data = await response.json();
+    dispatch(sendUserInfo(name, email));
     localStorage.setItem('token', data.token);
     this.setState({ willRedirect: true });
   };
@@ -49,6 +54,7 @@ class Login extends React.Component {
       <>
         {willRedirect && <Redirect to="/game" />}
         <div>Login</div>
+        {console.log(this.props)}
         <form>
           <h3>Insira seu nome:</h3>
           <input
@@ -91,6 +97,7 @@ class Login extends React.Component {
 }
 Login.propTypes = {
   history: PropTypes.func,
+  dispatch: PropTypes.func,
 }.isRequired;
 
-export default Login;
+export default connect()(Login);
