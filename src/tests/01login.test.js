@@ -1,5 +1,5 @@
 import React from "react";
-import { screen } from "@testing-library/react";
+import { screen,waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Login from "../pages/Login";
 import App from "../App";
@@ -54,7 +54,7 @@ describe('Login', () => {
     userEvent.type(name, 'thiago');
     expect(button.disabled).toBe(false);
     userEvent.click(button);
-    expect(history.location.pathname).toBe('/')
+    await waitFor(() => expect(history.location.pathname).toBe('/game'));
   })
 
   test('button settings ', () => {
