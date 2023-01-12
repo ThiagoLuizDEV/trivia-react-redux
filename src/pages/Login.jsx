@@ -2,7 +2,7 @@ import React from 'react';
 import { Redirect } from 'react-router-dom/cjs/react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import sendUserInfo from '../redux/actions/sendUserInfo';
+import sendUserInfo from '../redux/actions';
 
 class Login extends React.Component {
   state = {
@@ -27,12 +27,12 @@ class Login extends React.Component {
   };
 
   handleClick = async () => {
-    const { name, email } = this.state;
+    const { email, name } = this.state;
     const { dispatch } = this.props;
     const response = await fetch('https://opentdb.com/api_token.php?command=request');
     const data = await response.json();
-    localStorage.setItem('token', data.token);
     dispatch(sendUserInfo(name, email));
+    localStorage.setItem('token', data.token);
     this.setState({ willRedirect: true });
   };
 

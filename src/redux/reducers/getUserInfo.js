@@ -1,17 +1,19 @@
 const INITIAL_STATE = {
   email: '',
-  nome: '',
+  name: '',
 };
 
 const getUserInfo = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-  case 'USER_LOGIN': {
+  case 'SEND_USER_INFO': {
     return {
+      ...state,
       name: action.payload.name,
       email: action.payload.email,
     };
   }
-  default: return state;
+  default:
+    return state;
   }
 };
 
