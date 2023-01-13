@@ -1,4 +1,5 @@
 import React from 'react';
+import '../styles/GameContentStyle.css';
 import { Redirect } from 'react-router-dom/cjs/react-router-dom';
 
 class GameContent extends React.Component {
@@ -7,6 +8,7 @@ class GameContent extends React.Component {
     questions: [],
     questionId: 0,
     answers: [],
+    isClicked: false,
   };
 
   componentDidMount() {
@@ -17,8 +19,12 @@ class GameContent extends React.Component {
     const token = localStorage.getItem('token');
     const response = await fetch(`https://opentdb.com/api.php?amount=5&token=${token}`);
     const data = await response.json();
-    this.tokenValidation(data);
-    this.setState({ questions: data.results }, () => this.getAnswers());
+    this.setState(
+      { questions: data.results },
+      () => {
+        this.tokenValidation(data);
+      },
+    );
   }
 
   getAnswers() {
@@ -31,17 +37,21 @@ class GameContent extends React.Component {
   }
 
   tokenValidation(data) {
-    const errorCode = 3;
-    if (data.response_code === errorCode) {
+    const ik = 3;
+    if (data.response_code === ik) {
       localStorage.removeItem('token');
       this.setState({ isTokenInvalid: true });
     } else {
       this.setState({ isTokenInvalid: false });
+      this.getAnswers();
     }
   }
 
   render() {
-    const { isTokenInvalid, questions, questionId, answers } = this.state;
+    const { isTokenInvalid, questions, questionId,
+      answers, isClicked } = this.state;
+    const magicNumber = -1;
+    let answerId = magicNumber;
     return (
       <>
         {isTokenInvalid && <Redirect to="/" />}
@@ -56,18 +66,38 @@ class GameContent extends React.Component {
               <div data-testid="question-text">
                 {questions[questionId].question}
               </div>
-              {answers.map((ans, i) => (
-                <div
-                  key={ i }
-                  data-testid={
-                    ans === questions[questionId].correct_answer ? 'correct-answer'
-                      : `wrong-answear${i}`
-                  }
-                >
-                  {ans}
 
-                </div>
-              ))}
+              <div data-testid="answer-options">
+                {answers.map((ans, i) => {
+                  if (ans !== questions[questionId].correct_answer) {
+                    answerId += 1;
+                    return (
+                      <button
+                        type="button"
+                        key={ i }
+                        data-testid={ `wrong-answer${answerId}` }
+                        onClick={ () => this.setState({ isClicked: true }) }
+                        className={ isClicked && 'incorrectStyle' }
+                      >
+                        {ans}
+                      </button>
+                    );
+                  }
+                  return (
+                    <button
+                      type="button"
+                      onClick={ () => this.setState({ isClicked: true }) }
+                      key={ i }
+                      data-testid="correct-answer"
+                      className={ isClicked && 'correctStyle' }
+
+                    >
+                      {ans}
+                    </button>
+                  );
+                })}
+              </div>
+
             </div>
           )
 
