@@ -1,7 +1,7 @@
-.correctStyle{
-    border: 3px solid rgb(6, 240, 15)
+.correctStyle {
+  border: 3px solid rgb(6, 240, 15);
 }
 
-.incorrectStyle{
-    border: 3px solid red
+.incorrectStyle {
+  border: 3px solid red;
 }
