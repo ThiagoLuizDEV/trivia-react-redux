@@ -48,10 +48,12 @@ class GameContent extends React.Component {
   }
 
   render() {
-    const { isTokenInvalid, questions, questionId,
-      answers, isClicked } = this.state;
+    const { isTokenInvalid, questions, questionId, answers, isClicked } = this.state;
+
     const magicNumber = -1;
+
     let answerId = magicNumber;
+
     return (
       <>
         {isTokenInvalid && <Redirect to="/" />}
@@ -63,6 +65,7 @@ class GameContent extends React.Component {
               >
                 {questions[questionId].category}
               </div>
+
               <div data-testid="question-text">
                 {questions[questionId].question}
               </div>
@@ -90,7 +93,6 @@ class GameContent extends React.Component {
                       key={ i }
                       data-testid="correct-answer"
                       className={ isClicked && 'correctStyle' }
-
                     >
                       {ans}
                     </button>
@@ -100,7 +102,6 @@ class GameContent extends React.Component {
 
             </div>
           )
-
         }
       </>
     );
