@@ -112,7 +112,7 @@ class GameContent extends React.Component {
                       onClick={ () => this.setState({ isClicked: true }) }
                       key={ i }
                       data-testid="correct-answer"
-                      className={ isClicked ? 'incorrectStyle' : '' }
+                      className={ isClicked ? 'correctStyle' : '' }
                       disabled={ !time }
                     >
                       {ans}
