@@ -9,6 +9,7 @@ class GameContent extends React.Component {
     questionId: 0,
     answers: [],
     isClicked: false,
+    willRedirect: false,
     time: 30,
   };
 
@@ -76,8 +77,13 @@ class GameContent extends React.Component {
   // }
 
   render() {
-    const { isTokenInvalid, questions, questionId,
-      answers, isClicked, time } = this.state;
+    const { isTokenInvalid,
+      questions,
+      questionId,
+      answers,
+      isClicked,
+      willRedirect,
+      time } = this.state;
 
     const magicNumber = -1;
 
@@ -86,6 +92,7 @@ class GameContent extends React.Component {
     return (
       <>
         {isTokenInvalid && <Redirect to="/" />}
+        {willRedirect && <Redirect to="/feedback" />}
         {
           questions.length !== 0 && (
             <div>
@@ -109,7 +116,7 @@ class GameContent extends React.Component {
                         key={ i }
                         data-testid={ `wrong-answer${answerId}` }
                         onClick={ () => this.setState({ isClicked: true }) }
-                        className={ isClicked && 'incorrectStyle' }
+                        className={ isClicked ? 'incorrectStyle' : '' }
                         disabled={ !time }
                       >
                         {ans}
@@ -122,7 +129,7 @@ class GameContent extends React.Component {
                       onClick={ () => this.setState({ isClicked: true }) }
                       key={ i }
                       data-testid="correct-answer"
-                      className={ isClicked && 'correctStyle' }
+                      className={ isClicked ? 'correctStyle' : '' }
                       disabled={ !time }
                     >
                       {ans}
@@ -135,8 +142,15 @@ class GameContent extends React.Component {
 
               { isClicked && (
                 <button
-                  onClick={ () => this.setState({ questionId: questionId + 1,
-                    isClicked: false }, () => this.getAnswers()) }
+                  onClick={ () => {
+                    const four = 4;
+                    if (questionId < four) {
+                      this.setState({ questionId: questionId + 1,
+                        isClicked: false }, () => this.getAnswers());
+                    } else {
+                      this.setState({ willRedirect: true });
+                    }
+                  } }
                   data-testid="btn-next"
                   type="button"
                 >
