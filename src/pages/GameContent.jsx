@@ -9,10 +9,24 @@ class GameContent extends React.Component {
     questionId: 0,
     answers: [],
     isClicked: false,
+    time: 30,
   };
 
   componentDidMount() {
     this.getQuestions();
+  }
+
+  componentDidUpdate() {
+    this.timer();
+  }
+
+  getAnswers() {
+    const mn = 0.5;
+    const { questionId, questions } = this.state;
+    const correctAnswer = questions[questionId].correct_answer;
+    const incorrectAnswer = questions[questionId].incorrect_answers;
+    const answers = [...incorrectAnswer, correctAnswer].sort(() => Math.random() - mn);
+    this.setState({ answers });
   }
 
   async getQuestions() {
@@ -27,13 +41,10 @@ class GameContent extends React.Component {
     );
   }
 
-  getAnswers() {
-    const mn = 0.5;
-    const { questionId, questions } = this.state;
-    const correctAnswer = questions[questionId].correct_answer;
-    const incorrectAnswer = questions[questionId].incorrect_answers;
-    const answers = [...incorrectAnswer, correctAnswer].sort(() => Math.random() - mn);
-    this.setState({ answers });
+  timer() {
+    const { time } = this.state;
+    const mN = 1000;
+    return time > 0 && setTimeout(() => this.setState({ time: time - 1 }), mN);
   }
 
   tokenValidation(data) {
@@ -65,7 +76,8 @@ class GameContent extends React.Component {
   // }
 
   render() {
-    const { isTokenInvalid, questions, questionId, answers, isClicked } = this.state;
+    const { isTokenInvalid, questions, questionId,
+      answers, isClicked, time } = this.state;
 
     const magicNumber = -1;
 
@@ -98,6 +110,7 @@ class GameContent extends React.Component {
                         data-testid={ `wrong-answer${answerId}` }
                         onClick={ () => this.setState({ isClicked: true }) }
                         className={ isClicked && 'incorrectStyle' }
+                        disabled={ !time }
                       >
                         {ans}
                       </button>
@@ -110,12 +123,26 @@ class GameContent extends React.Component {
                       key={ i }
                       data-testid="correct-answer"
                       className={ isClicked && 'correctStyle' }
+                      disabled={ !time }
                     >
                       {ans}
                     </button>
                   );
                 })}
               </div>
+
+              <p>{`TIMER: ${time}`}</p>
+
+              { isClicked && (
+                <button
+                  onClick={ () => this.setState({ questionId: questionId + 1,
+                    isClicked: false }, () => this.getAnswers()) }
+                  data-testid="btn-next"
+                  type="button"
+                >
+                  Next
+                </button>)}
+
             </div>
 
           )
