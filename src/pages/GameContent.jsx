@@ -45,7 +45,8 @@ class GameContent extends React.Component {
   timer() {
     const { time } = this.state;
     const mN = 1000;
-    return time > 0 && setTimeout(() => this.setState({ time: time - 1 }), mN);
+    this.interval = setTimeout(() => this.setState({ time: time - 1 }), mN);
+    // return time > 0 && setTimeout(() => this.setState({ time: time - 1 }), mN);
   }
 
   tokenValidation(data) {
@@ -58,6 +59,12 @@ class GameContent extends React.Component {
       this.getAnswers();
     }
   }
+
+  handleClick = () => {
+    this.setState({ isClicked: true });
+    clearTimeout(this.interval);
+    console.log(this.interval);
+  };
 
   // timeCount() {
   //   const elem = document.getElementById('Timer');
@@ -115,7 +122,7 @@ class GameContent extends React.Component {
                         type="button"
                         key={ i }
                         data-testid={ `wrong-answer${answerId}` }
-                        onClick={ () => this.setState({ isClicked: true }) }
+                        onClick={ this.handleClick }
                         className={ isClicked ? 'incorrectStyle' : '' }
                         disabled={ !time }
                       >
@@ -126,7 +133,7 @@ class GameContent extends React.Component {
                   return (
                     <button
                       type="button"
-                      onClick={ () => this.setState({ isClicked: true }) }
+                      onClick={ this.handleClick }
                       key={ i }
                       data-testid="correct-answer"
                       className={ isClicked ? 'correctStyle' : '' }
