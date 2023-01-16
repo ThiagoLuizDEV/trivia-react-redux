@@ -19,7 +19,7 @@ class GameContent extends React.Component {
   componentDidUpdate() {
     this.timer();
   }
-  
+
   getAnswers() {
     const mn = 0.5;
     const { questionId, questions } = this.state;
@@ -39,15 +39,6 @@ class GameContent extends React.Component {
         this.tokenValidation(data);
       },
     );
-  }
-
-  getAnswers() {
-    const mn = 0.5;
-    const { questionId, questions } = this.state;
-    const correctAnswer = questions[questionId].correct_answer;
-    const incorrectAnswer = questions[questionId].incorrect_answers;
-    const answers = [...incorrectAnswer, correctAnswer].sort(() => Math.random() - mn);
-    this.setState({ answers });
   }
 
   timer() {
