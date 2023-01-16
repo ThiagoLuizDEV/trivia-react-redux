@@ -19,6 +19,15 @@ class GameContent extends React.Component {
   componentDidUpdate() {
     this.timer();
   }
+  
+  getAnswers() {
+    const mn = 0.5;
+    const { questionId, questions } = this.state;
+    const correctAnswer = questions[questionId].correct_answer;
+    const incorrectAnswer = questions[questionId].incorrect_answers;
+    const answers = [...incorrectAnswer, correctAnswer].sort(() => Math.random() - mn);
+    this.setState({ answers });
+  }
 
   async getQuestions() {
     const token = localStorage.getItem('token');
@@ -114,6 +123,16 @@ class GameContent extends React.Component {
                 })}
               </div>
               <p>{`TIMER: ${time}`}</p>
+
+              { isClicked && (
+                <button
+                  onClick={ () => this.setState({ questionId: questionId + 1,
+                    isClicked: false }, () => this.getAnswers()) }
+                  data-testid="btn-next"
+                  type="button"
+                >
+                  Next
+                </button>)}
 
             </div>
           )
