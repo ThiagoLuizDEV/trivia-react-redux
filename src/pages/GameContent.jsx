@@ -47,6 +47,23 @@ class GameContent extends React.Component {
     }
   }
 
+  // timeCount() {
+  //   const elem = document.getElementById('Timer');
+
+  //   const timerId = setInterval(countdown, 1000);
+
+  //   function countdown() {
+  //     const timeSeconds = 30;
+  //     if (timeSeconds === 0) {
+  //       clearTimeout(timerId);
+  //       doSomething();
+  //     } else {
+  //       elem.innerHTML = `${timeLeft} seconds remaining`;
+  //       timeSeconds--;
+  //     }
+  //   }
+  // }
+
   render() {
     const { isTokenInvalid, questions, questionId, answers, isClicked } = this.state;
 
@@ -99,8 +116,8 @@ class GameContent extends React.Component {
                   );
                 })}
               </div>
-
             </div>
+
           )
         }
       </>
