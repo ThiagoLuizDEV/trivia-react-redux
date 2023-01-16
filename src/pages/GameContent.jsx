@@ -10,10 +10,15 @@ class GameContent extends React.Component {
     answers: [],
     isClicked: false,
     willRedirect: false,
+    time: 30,
   };
 
   componentDidMount() {
     this.getQuestions();
+  }
+
+  componentDidUpdate() {
+    this.timer();
   }
 
   getAnswers() {
@@ -37,6 +42,12 @@ class GameContent extends React.Component {
     );
   }
 
+  timer() {
+    const { time } = this.state;
+    const mN = 1000;
+    return time > 0 && setTimeout(() => this.setState({ time: time - 1 }), mN);
+  }
+
   tokenValidation(data) {
     const ik = 3;
     if (data.response_code === ik) {
@@ -54,7 +65,8 @@ class GameContent extends React.Component {
       questionId,
       answers,
       isClicked,
-      willRedirect } = this.state;
+      willRedirect,
+      time } = this.state;
 
     const magicNumber = -1;
 
@@ -88,6 +100,7 @@ class GameContent extends React.Component {
                         data-testid={ `wrong-answer${answerId}` }
                         onClick={ () => this.setState({ isClicked: true }) }
                         className={ isClicked ? 'incorrectStyle' : '' }
+                        disabled={ !time }
                       >
                         {ans}
                       </button>
@@ -99,13 +112,15 @@ class GameContent extends React.Component {
                       onClick={ () => this.setState({ isClicked: true }) }
                       key={ i }
                       data-testid="correct-answer"
-                      className={ isClicked ? 'correctStyle' : '' }
+                      className={ isClicked ? 'incorrectStyle' : '' }
+                      disabled={ !time }
                     >
                       {ans}
                     </button>
                   );
                 })}
               </div>
+              <p>{`TIMER: ${time}`}</p>
 
               { isClicked && (
                 <button
