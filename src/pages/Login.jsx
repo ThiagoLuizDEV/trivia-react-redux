@@ -54,7 +54,7 @@ class Login extends React.Component {
       <>
         {willRedirect && <Redirect to="/game" />}
         <div>Login</div>
-        {console.log(this.props)}
+
         <form>
           <h3>Insira seu nome:</h3>
           <input
