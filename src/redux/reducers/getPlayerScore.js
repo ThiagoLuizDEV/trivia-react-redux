@@ -1,15 +1,14 @@
 const INITIAL_STATE = {
   score: 0,
   assertions: 0,
-
 };
 
 const player = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-  case 'GET_PLAYER_SCORE': {
+  case 'SEND_PLAYER_SCORE': {
     return {
       ...state,
-      score: action.score,
+      score: state.score + action.payload.score,
       assertions: state.assertions + 1,
     };
   }

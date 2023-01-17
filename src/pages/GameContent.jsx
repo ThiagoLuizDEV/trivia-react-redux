@@ -1,6 +1,9 @@
 import React from 'react';
 import '../styles/GameContentStyle.css';
 import { Redirect } from 'react-router-dom/cjs/react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import sendPlayerScore from '../redux/actions/sendPlayerScore';
 
 class GameContent extends React.Component {
   state = {
@@ -15,9 +18,6 @@ class GameContent extends React.Component {
 
   componentDidMount() {
     this.getQuestions();
-  }
-
-  componentDidUpdate() {
     this.timer();
   }
 
@@ -42,12 +42,32 @@ class GameContent extends React.Component {
     );
   }
 
-  timer() {
-    const { time } = this.state;
-    const mN = 1000;
-    this.interval = setTimeout(() => this.setState({ time: time - 1 }), mN);
-    // return time > 0 && setTimeout(() => this.setState({ time: time - 1 }), mN);
-  }
+  handleClickIncorrect = () => {
+    this.setState({ isClicked: true });
+    clearInterval(this.interval);
+  };
+
+  handleClickCorrect = () => {
+    const { dispatch } = this.props;
+    this.setState({ isClicked: true });
+    clearInterval(this.interval);
+    const { questions, questionId, time } = this.state;
+    const { difficulty } = questions[questionId];
+    const ten = 10;
+    if (difficulty === 'hard') {
+      const three = 3;
+      const points = ten + (time * three);
+      dispatch(sendPlayerScore(points));
+    } else if (difficulty === 'medium') {
+      const two = 2;
+      const points = ten + (time * two);
+      dispatch(sendPlayerScore(points));
+    } else {
+      const one = 1;
+      const points = ten + (time * one);
+      dispatch(sendPlayerScore(points));
+    }
+  };
 
   tokenValidation(data) {
     const ik = 3;
@@ -60,28 +80,18 @@ class GameContent extends React.Component {
     }
   }
 
-  handleClick = () => {
-    this.setState({ isClicked: true });
-    clearTimeout(this.interval);
-    console.log(this.interval);
-  };
-
-  // timeCount() {
-  //   const elem = document.getElementById('Timer');
-
-  //   const timerId = setInterval(countdown, 1000);
-
-  //   function countdown() {
-  //     const timeSeconds = 30;
-  //     if (timeSeconds === 0) {
-  //       clearTimeout(timerId);
-  //       doSomething();
-  //     } else {
-  //       elem.innerHTML = `${timeLeft} seconds remaining`;
-  //       timeSeconds--;
-  //     }
-  //   }
-  // }
+  timer() {
+    const mN = 1000;
+    this.interval = setInterval(() => {
+      this.setState((prevState) => {
+        if (prevState.time > 0) {
+          return { time: prevState.time - 1 };
+        }
+        clearInterval(this.interval);
+        this.setState({ isClicked: true });
+      });
+    }, mN);
+  }
 
   render() {
     const { isTokenInvalid,
@@ -122,7 +132,7 @@ class GameContent extends React.Component {
                         type="button"
                         key={ i }
                         data-testid={ `wrong-answer${answerId}` }
-                        onClick={ this.handleClick }
+                        onClick={ this.handleClickIncorrect }
                         className={ isClicked ? 'incorrectStyle' : '' }
                         disabled={ !time }
                       >
@@ -133,7 +143,7 @@ class GameContent extends React.Component {
                   return (
                     <button
                       type="button"
-                      onClick={ this.handleClick }
+                      onClick={ this.handleClickCorrect }
                       key={ i }
                       data-testid="correct-answer"
                       className={ isClicked ? 'correctStyle' : '' }
@@ -150,6 +160,8 @@ class GameContent extends React.Component {
               { isClicked && (
                 <button
                   onClick={ () => {
+                    this.setState(({ time: 30 }));
+                    this.timer();
                     const four = 4;
                     if (questionId < four) {
                       this.setState({ questionId: questionId + 1,
@@ -173,4 +185,8 @@ class GameContent extends React.Component {
   }
 }
 
-export default GameContent;
+GameContent.propTypes = {
+  dispatch: PropTypes.func,
+}.isRequired;
+
+export default connect()(GameContent);
