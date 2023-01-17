@@ -19,7 +19,7 @@ class Header extends React.Component {
 
   render() {
     const { hash } = this.state;
-    const { name } = this.props;
+    const { name, score } = this.props;
     return (
       <header>
         <h2>Informações da pessoa jogadora:</h2>
@@ -34,7 +34,8 @@ class Header extends React.Component {
           { name }
         </h3>
         <h3 data-testid="header-score">
-          Placar: 0
+          Placar:
+          { score }
         </h3>
       </header>
     );
@@ -49,6 +50,7 @@ Header.propTypes = {
 const mapStateToProps = (globalState) => ({
   name: globalState.getUserInfo.name,
   email: globalState.getUserInfo.email,
+  score: globalState.player.score,
 });
 
 export default connect(mapStateToProps)(Header);

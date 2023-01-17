@@ -1,6 +1,7 @@
 const INITIAL_STATE = {
   email: '',
   name: '',
+
 };
 
 const getUserInfo = (state = INITIAL_STATE, action) => {
